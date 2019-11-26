@@ -1,0 +1,39 @@
+version: '3.6'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: confluent
+      MYSQL_DATABASE: root
+      MYSQL_DATABASE: legacy
+    ports:
+      - 3306:3306
+    volumes:
+      - ./crebas:/docker-entrypoint-initdb.d
+      - ./crebas/products.csv:/var/lib/mysql-files/products.csv
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=row --binlog-row-image=full
+
+  debezium:
+    container_name: debezium
+    depends_on:
+      - mysql
+    build:
+      context: debezium
+    volumes:
+      - ./debezium/conf:/conf
+      - ${DBZ_CONFIG_FILE}:/conf/cc.properties
+    ports:
+      - 8083:8083
+    command: /usr/bin/connect-standalone /conf/debezium-standalone.properties /conf/mysql-connector.properties /conf/mongo-connector.properties
+
+  mongo:
+    container_name: mongo
+    image: mongo:4
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: confluent
+

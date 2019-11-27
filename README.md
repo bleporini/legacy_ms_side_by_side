@@ -20,7 +20,9 @@ $ docker build -f ccloud.dockerfile -t ccloud:latest .
 
 Run the `start.sh` script having defined two environment variables:
 - `DBZ_CONFIG_FILE` : the path to the file containing your Confluent Cloud endpoint, the API Key and the API password in the following properties: `cc.username`, `cc.password`, `cc.bootstrap.server`
--  `CCLOUD_CREDENTIALS` : the path of a file containing your Confluent Cloud credentials defined in the following environment variables : `XX_CCLOUD_EMAIL`, `XX_CCLOUD_PASSWORD`. This will prevent you to enter your credentials interactively.
+- `CCLOUD_CREDENTIALS` : the path of a file containing your Confluent Cloud credentials defined in the following environment variables : `XX_CCLOUD_EMAIL`, `XX_CCLOUD_PASSWORD`. This will prevent you to enter your credentials interactively.
+- `CCLOUD_API_KEY` : Your API key, for KsqlDB Server 
+- `CCLOUD_API_PASSWORD` : Your API password, for KsqlDB Server
 Example:
 ```bash
 $ DBZ_CONFIG_FILE=/conf/cc.properties CCLOUD_CREDENTIALS=/conf/credentials ./start.sh
